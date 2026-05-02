@@ -10,6 +10,7 @@
   --warn: #f7b955;
   --danger: #ff6b7a;
   --gold: #ffda44;
+  --mobile-control-h: 78px;
 }
 
 * {
@@ -346,7 +347,7 @@ h1 {
 @media (max-width: 720px) {
   .game-shell,
   .settings-page {
-    width: min(98vw, 980px);
+    width: min(96vw, 460px);
     margin-top: 8px;
   }
 
@@ -379,82 +380,94 @@ h1 {
   }
 }
 
-/* iPhone／窄螢幕：縮小標題與 HUD，留更多空間給遊戲 */
+/* iPhone／窄螢幕：參考手機版布局，讓遊戲區優先佔滿可視高度 */
 @media (max-width: 480px) {
   .game-shell {
-    margin-top: 4px;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+    width: min(96vw, 460px);
+    margin-top: 6px;
+    padding-bottom: calc(var(--mobile-control-h) + 10px + env(safe-area-inset-bottom, 0));
   }
 
   .hud-panel {
-    padding: 8px 10px;
-    margin-bottom: 8px;
-    border-radius: 14px;
+    padding: 7px 8px;
+    margin-bottom: 6px;
+    border-radius: 12px;
   }
 
   .title-row {
-    margin-bottom: 8px;
-    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    gap: 6px;
   }
 
   .eyebrow {
-    font-size: 0.62rem;
-    letter-spacing: 0.06em;
+    display: none;
   }
 
   h1 {
-    font-size: 1.05rem;
-    line-height: 1.25;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .actions {
+    flex-wrap: nowrap;
+    gap: 4px;
   }
 
   .actions .btn-link,
   .actions button {
-    padding: 6px 10px;
-    font-size: 0.78rem;
-    border-radius: 10px;
+    padding: 4px 7px;
+    font-size: 0.7rem;
+    border-radius: 8px;
+    white-space: nowrap;
   }
 
   .stats-grid {
-    gap: 6px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
   }
 
   .stat-card {
-    padding: 6px 8px;
-    border-radius: 10px;
+    padding: 4px 5px;
+    border-radius: 8px;
   }
 
   .stat-card span {
-    font-size: 0.62rem;
+    font-size: 0.55rem;
   }
 
   .stat-card b {
-    margin-top: 2px;
-    font-size: 0.8rem;
+    margin-top: 1px;
+    font-size: 0.68rem;
     line-height: 1.2;
   }
 
   .meter {
-    height: 4px;
-    margin-top: 4px;
+    height: 3px;
+    margin-top: 3px;
   }
 
   .stage-card {
-    padding: 6px;
-    border-radius: 14px;
+    padding: 5px;
+    border-radius: 12px;
   }
 
   #gameCanvas {
-    height: min(58vh, 520px);
-    min-height: 360px;
+    height: calc(100dvh - 180px - var(--mobile-control-h) - env(safe-area-inset-bottom, 0));
+    min-height: 390px;
+    max-height: 690px;
     border-radius: 12px;
     border-width: 1px;
   }
 
   .question-strip {
-    right: 10px;
-    bottom: 46px;
-    left: 10px;
-    padding: 8px 10px;
+    right: 8px;
+    bottom: 42px;
+    left: 8px;
+    padding: 7px 9px;
     border-radius: 10px;
   }
 
@@ -468,21 +481,40 @@ h1 {
   }
 
   .message-text {
-    right: 10px;
-    bottom: 8px;
-    left: 10px;
-    font-size: 0.68rem;
+    right: 8px;
+    bottom: 7px;
+    left: 8px;
+    font-size: 0.64rem;
     line-height: 1.35;
   }
 
   .mobile-pad {
-    gap: 8px;
-    margin-top: 8px;
-    padding-bottom: env(safe-area-inset-bottom, 0);
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    height: calc(var(--mobile-control-h) + env(safe-area-inset-bottom, 0));
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: min(100vw, 460px);
+    margin: 0 auto;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0));
+    border-top: 1px solid var(--line);
+    background: rgb(17 21 45 / 95%);
   }
 
   .mobile-pad button {
     min-height: 48px;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    border-radius: 12px;
+  }
+}
+
+@supports not (height: 100dvh) {
+  @media (max-width: 480px) {
+    #gameCanvas {
+      height: calc(100vh - 180px - var(--mobile-control-h) - env(safe-area-inset-bottom, 0));
+    }
   }
 }
