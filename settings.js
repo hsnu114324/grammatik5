@@ -7,8 +7,8 @@ const DEFAULT_SETTINGS = {
   maxHp: 100,
   startPower: 1,
   doorSpeed: 86,
-  rewardMode: "auto",
-  penaltyMode: "auto",
+  rewardMode: "heal",
+  penaltyMode: "hp",
   customRows: "",
 };
 
