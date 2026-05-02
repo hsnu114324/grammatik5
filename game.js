@@ -258,12 +258,23 @@ function makeDoor(label, correct) {
   };
 }
 
+function isCompactPhone() {
+  return state.width <= 480;
+}
+
 function positionDoors() {
-  const doorW = clamp(state.width * 0.27, 150, 230);
-  const gapCenters = [state.width * 0.3, state.width * 0.7];
+  const compact = isCompactPhone();
+  const doorW = compact
+    ? clamp(state.width * 0.22, 108, 152)
+    : clamp(state.width * 0.27, 150, 230);
+  const gapCenters = compact
+    ? [state.width * 0.28, state.width * 0.72]
+    : [state.width * 0.3, state.width * 0.7];
   state.doors.forEach((door, index) => {
     door.w = doorW;
-    door.h = clamp(state.height * 0.18, 96, 124);
+    door.h = compact
+      ? clamp(state.height * 0.2, 100, 128)
+      : clamp(state.height * 0.18, 96, 124);
     door.x = gapCenters[index] - door.w / 2;
   });
 }
@@ -546,28 +557,39 @@ function drawSpace() {
 }
 
 function drawDoors() {
+  const compact = isCompactPhone();
+  const labelFont = compact
+    ? "700 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    : "700 17px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  const lineHeight = compact ? 16 : 22;
+  const padX = compact ? 10 : 22;
+  const hitFont = compact
+    ? "800 11px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    : "800 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
   for (const door of state.doors) {
     const glow = "rgba(126, 166, 255, 0.16)";
     const flash = door.hitFlash > 0;
-    roundedRect(door.x - 9, door.y - 9, door.w + 18, door.h + 18, 22, glow);
-    roundedRect(door.x, door.y, door.w, door.h, 18, flash ? door.flashColor : "#1b2754");
+    const inset = compact ? 5 : 9;
+    roundedRect(door.x - inset, door.y - inset, door.w + inset * 2, door.h + inset * 2, compact ? 16 : 22, glow);
+    roundedRect(door.x, door.y, door.w, door.h, compact ? 14 : 18, flash ? door.flashColor : "#1b2754");
     ctx.strokeStyle = flash ? door.flashColor : "#7ea6ff";
-    ctx.lineWidth = 3;
-    strokeRoundedRect(door.x, door.y, door.w, door.h, 18);
+    ctx.lineWidth = compact ? 2 : 3;
+    strokeRoundedRect(door.x, door.y, door.w, door.h, compact ? 14 : 18);
 
     ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-    ctx.fillRect(door.x + door.w / 2 - 1, door.y + 12, 2, door.h - 24);
+    ctx.fillRect(door.x + door.w / 2 - 1, door.y + (compact ? 10 : 12), 2, door.h - (compact ? 20 : 24));
 
     ctx.fillStyle = flash ? "#07122b" : "#f5f7ff";
-    ctx.font = "700 17px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.font = labelFont;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    wrapText(door.label, door.x + door.w / 2, door.y + door.h / 2, door.w - 22, 22);
+    wrapText(door.label, door.x + door.w / 2, door.y + door.h / 2 + (compact ? 4 : 0), door.w - padX, lineHeight, 3);
 
     ctx.fillStyle = "#ffda44";
-    ctx.font = "800 13px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+    ctx.font = hitFont;
     ctx.textBaseline = "top";
-    ctx.fillText(`${Math.max(DOOR_MAX_HITS - door.hits, 0)} HIT`, door.x + door.w / 2, door.y + 10);
+    ctx.fillText(`${Math.max(DOOR_MAX_HITS - door.hits, 0)} HIT`, door.x + door.w / 2, door.y + (compact ? 7 : 10));
   }
 }
 
@@ -667,7 +689,7 @@ function pathRoundedRect(x, y, w, h, r) {
   ctx.quadraticCurveTo(x, y, x + radius, y);
 }
 
-function wrapText(text, x, y, maxWidth, lineHeight) {
+function wrapText(text, x, y, maxWidth, lineHeight, maxLines = 3) {
   const words = String(text).split(/\s+/);
   const lines = [];
   let line = "";
@@ -683,9 +705,15 @@ function wrapText(text, x, y, maxWidth, lineHeight) {
   }
   if (line) lines.push(line);
 
-  const visible = lines.slice(0, 4);
+  const visible = lines.slice(0, maxLines);
   if (lines.length > visible.length) {
-    visible[visible.length - 1] = `${visible[visible.length - 1].slice(0, 20)}...`;
+    const last = visible[visible.length - 1];
+    const ell = "...";
+    let truncated = last;
+    while (truncated.length > 0 && ctx.measureText(`${truncated}${ell}`).width > maxWidth) {
+      truncated = truncated.slice(0, -1);
+    }
+    visible[visible.length - 1] = `${truncated}${ell}`;
   }
 
   const startY = y - ((visible.length - 1) * lineHeight) / 2;
