@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>德文雷電：勇者之門</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="hud-panel">
+        <div class="title-row">
+          <div>
+            <p class="eyebrow">Deutsch Blitzflug</p>
+            <h1>德文雷電：勇者之門</h1>
+          </div>
+          <div class="actions">
+            <a class="btn-link" href="./settings.html">設定</a>
+            <button id="restartBtn" type="button">重新開始</button>
+          </div>
+        </div>
+
+        <div class="stats-grid" aria-label="遊戲狀態">
+          <div class="stat-card">
+            <span>分數</span>
+            <b id="scoreText">0</b>
+          </div>
+          <div class="stat-card">
+            <span>血量</span>
+            <b id="hpText">100 / 100</b>
+            <div class="meter"><i id="hpMeter"></i></div>
+          </div>
+          <div class="stat-card">
+            <span>火力</span>
+            <b id="powerText">1</b>
+            <div class="meter power"><i id="powerMeter"></i></div>
+          </div>
+          <div class="stat-card">
+            <span>進度</span>
+            <b id="progressText">0 / 0</b>
+          </div>
+        </div>
+      </header>
+
+      <section class="stage-card">
+        <canvas id="gameCanvas" width="900" height="620" aria-label="德文雷電遊戲畫面"></canvas>
+        <div class="question-strip">
+          <span>題目</span>
+          <strong id="questionText">載入題庫中...</strong>
+        </div>
+        <p id="messageText" class="message-text">用方向鍵或 WASD 移動；空白鍵可發射追蹤流星，結束後可重新開始。</p>
+      </section>
+
+      <nav class="mobile-pad" aria-label="手機控制">
+        <button id="leftBtn" type="button">左移</button>
+        <button id="rightBtn" type="button">右移</button>
+      </nav>
+    </main>
+
+    <script src="./data/words-data.js"></script>
+    <script src="./game.js"></script>
+  </body>
+</html>

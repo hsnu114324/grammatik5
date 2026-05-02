@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>德文雷電設定</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="settings-page">
+      <section class="settings-card">
+        <div class="title-row">
+          <div>
+            <p class="eyebrow">Deutsch Blitzflug</p>
+            <h1>德文雷電設定</h1>
+          </div>
+          <div class="actions">
+            <a class="btn-link" href="./index.html">回遊戲</a>
+          </div>
+        </div>
+
+        <p class="settings-lead">
+          選擇德文題庫來源與戰鬥難度。每列資料使用「中文提示,德文答案」格式；遊戲中會在下方顯示中文題目，前方兩扇門顯示德文選項。
+        </p>
+
+        <form id="settingsForm">
+          <section class="setting-section">
+            <h2>德文資料來源</h2>
+            <div id="sourceGrid" class="option-grid"></div>
+          </section>
+
+          <section class="setting-section">
+            <h2>遊戲規則</h2>
+            <div class="option-grid">
+              <label class="field">
+                每局題數
+                <input id="questionCount" type="number" min="0" step="1" />
+                <small>0 代表使用所選來源的全部題目。</small>
+              </label>
+              <label class="field">
+                初始血量
+                <input id="maxHp" type="number" min="40" max="240" step="10" />
+              </label>
+              <label class="field">
+                初始火力
+                <input id="startPower" type="number" min="1" max="7" step="1" />
+              </label>
+              <label class="field">
+                門後期速度
+                <select id="doorSpeed">
+                  <option value="62">慢速練習</option>
+                  <option value="86">標準</option>
+                  <option value="112">快速挑戰</option>
+                  <option value="140">雷電高速</option>
+                </select>
+                <small>每局一開始都會很慢，之後依進度逐漸加快。</small>
+              </label>
+              <label class="field">
+                射中正確門
+                <select id="rewardMode">
+                  <option value="auto">自動：火力或回血</option>
+                  <option value="power">固定提升火力</option>
+                  <option value="heal">固定回血</option>
+                </select>
+              </label>
+              <label class="field">
+                射中錯誤門
+                <select id="penaltyMode">
+                  <option value="auto">自動：火力或血量下降</option>
+                  <option value="power">固定火力減弱</option>
+                  <option value="hp">固定扣血</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="setting-section">
+            <h2>自訂德文題目</h2>
+            <label class="field">
+              自訂列
+              <textarea id="customRows" placeholder="例如：&#10;我需要這個,Ich brauche das&#10;我們回家吧,Gehen wir nach Hause"></textarea>
+              <small>每行一題。可搭配上方資料來源一起使用。</small>
+            </label>
+          </section>
+
+          <div class="settings-actions">
+            <button id="saveBtn" type="submit">儲存設定</button>
+            <button id="resetBtn" class="danger" type="button">還原預設</button>
+            <a class="btn-link" href="./index.html">開始遊戲</a>
+          </div>
+          <p id="statusNote" class="status-note"></p>
+        </form>
+      </section>
+    </main>
+
+    <script src="./data/words-data.js"></script>
+    <script src="./settings.js"></script>
+  </body>
+</html>
